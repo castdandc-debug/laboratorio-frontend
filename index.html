@@ -95,20 +95,8 @@
         return;
       }
 
-      // Cambia esta URL por tu URL en Render.com
       const url = https://laboratorio-backend-e00k.onrender.com/api/reporte/\;
-      
-      fetch(url)
-        .then(res => {
-          if (res.ok) {
-            window.open(url, '_blank');
-          } else {
-            alert('Paciente no encontrado');
-          }
-        })
-        .catch(err => {
-          alert('Error al conectar con el servidor');
-        });
+      window.open(url, '_blank');
     }
   </script>
 </body>
