@@ -117,7 +117,7 @@
     <!-- Formulario para agregar paciente -->
     <form id="form-paciente">
       <div class="form-group">
-        <label>Folio (YYMMDDNNN)</label>
+        <label for="folio">Folio (AAMMDDNNN)</label>
         <input type="text" id="folio" readonly />
       </div>
       <div class="form-group">
@@ -176,19 +176,37 @@
   </div>
 
   <script>
-    // Simulación de datos
-    let pacientes = [
-      { id: 1, folio: '250815001', nombre: 'María González', edad: 37, sexo: 'Femenino', telefono: '9961234567', email: 'maria@email.com', fechaNac: '1988-03-15' }
-    ];
+    // Secuencia global para folios
+    let secuenciaGlobal = 1;
 
-    // Genera folio en formato YYMMDDNNN
+    // Obtiene el último número usado hoy
+    function obtenerUltimoNumero() {
+      const hoy = new Date();
+      const fechaStr = hoy.toISOString().split('T')[0];
+      const ultimo = localStorage.getItem(`ultimo-numero-${fechaStr}`);
+      return ultimo ? parseInt(ultimo) : 0;
+    }
+
+    // Guarda el último número usado
+    function guardarUltimoNumero(num) {
+      const hoy = new Date();
+      const fechaStr = hoy.toISOString().split('T')[0];
+      localStorage.setItem(`ultimo-numero-${fechaStr}`, num.toString());
+    }
+
+    // Genera el siguiente folio consecutivo
     function generarFolio() {
       const hoy = new Date();
       const year = String(hoy.getFullYear()).slice(-2);
       const month = String(hoy.getMonth() + 1).padStart(2, '0');
       const day = String(hoy.getDate()).padStart(2, '0');
-      const secuencia = Math.floor(Math.random() * 900) + 100; // 3 dígitos
-      return `${year}${month}${day}${secuencia}`;
+
+      let ultimoNum = obtenerUltimoNumero();
+      const nuevoNum = ultimoNum + 1;
+      guardarUltimoNumero(nuevoNum);
+
+      const numeroFormateado = String(nuevoNum).padStart(3, '0');
+      return `${year}${month}${day}${numeroFormateado}`;
     }
 
     // Calcula edad
@@ -203,7 +221,7 @@
       document.getElementById('edad').value = edad;
     });
 
-    // Inicializa folio
+    // Inicializa un nuevo paciente
     function nuevoPaciente() {
       const folio = generarFolio();
       document.getElementById('folio').value = folio;
@@ -211,6 +229,9 @@
       document.getElementById('folio').value = folio;
       document.getElementById('form-paciente').removeAttribute('data-edit-id');
     }
+
+    // Simulación de datos (luego se conectará al backend)
+    let pacientes = [];
 
     // Renderiza tabla
     function renderizarPacientes() {
