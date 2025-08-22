@@ -9,11 +9,28 @@
       font-family: 'Segoe UI', sans-serif;
       background: #f4f6f9;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+    }
+    .navbar {
+      background: #003366;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+    }
+    .navbar a:hover {
+      text-decoration: underline;
     }
     .container {
       max-width: 1000px;
-      margin: auto;
+      margin: 30px auto;
       background: white;
       padding: 30px;
       border-radius: 10px;
@@ -22,25 +39,232 @@
     h1 {
       color: #003366;
       text-align: center;
+      margin-bottom: 30px;
     }
-    .back {
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
       display: block;
-      margin: 30px auto;
-      width: 200px;
-      padding: 12px;
-      background: #d9534f;
-      color: white;
-      text-decoration: none;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
       border-radius: 5px;
-      text-align: center;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #003366;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background: #002244;
+    }
+    .btn-danger {
+      background: #d9534f;
+    }
+    .btn-danger:hover {
+      background: #c9302c;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #f8f9fa;
+      color: #333;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
     }
   </style>
 </head>
 <body>
+  <!-- Barra superior -->
+  <div class="navbar">
+    <div>Panel de Administrador</div>
+    <div>
+      <a href="#" id="perfil-link">👤 Perfil</a>
+      <a href="../inicio.html">Cerrar Sesión</a>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
   <div class="container">
     <h1>Gestión de Pacientes</h1>
-    <p>Aquí puedes registrar, editar y buscar pacientes.</p>
-    <a href="../dashboard.html" class="back">← Volver al Dashboard</a>
+
+    <!-- Formulario para agregar paciente -->
+    <form id="form-paciente">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" required />
+      </div>
+      <div class="form-group">
+        <label for="edad">Edad</label>
+        <input type="number" id="edad" required />
+      </div>
+      <div class="form-group">
+        <label for="sexo">Sexo</label>
+        <select id="sexo" required>
+          <option value="">Selecciona</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input type="text" id="telefono" />
+      </div>
+      <div class="form-group">
+        <label for="email">Correo</label>
+        <input type="email" id="email" />
+      </div>
+      <button type="submit">Guardar Paciente</button>
+    </form>
+
+    <hr style="margin: 30px 0;" />
+
+    <!-- Tabla de pacientes -->
+    <h2>Lista de Pacientes</h2>
+    <table id="tabla-pacientes">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Edad</th>
+          <th>Sexo</th>
+          <th>Teléfono</th>
+          <th>Correo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Los pacientes se cargarán aquí -->
+      </tbody>
+    </table>
   </div>
+
+  <script>
+    // Simulación de datos (luego se conectará al backend)
+    let pacientes = [
+      { id: 1, nombre: 'María González', edad: 37, sexo: 'Femenino', telefono: '9961234567', email: 'maria@email.com' }
+    ];
+
+    // Mostrar pacientes en la tabla
+    function renderizarPacientes() {
+      const tbody = document.querySelector('#tabla-pacientes tbody');
+      tbody.innerHTML = '';
+      pacientes.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.nombre}</td>
+          <td>${p.edad}</td>
+          <td>${p.sexo}</td>
+          <td>${p.telefono}</td>
+          <td>${p.email}</td>
+          <td class="actions">
+            <button onclick="editarPaciente(${p.id})">Editar</button>
+            <button class="btn-danger" onclick="eliminarPaciente(${p.id})">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Agregar paciente
+    document.getElementById('form-paciente').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value;
+      const edad = document.getElementById('edad').value;
+      const sexo = document.getElementById('sexo').value;
+      const telefono = document.getElementById('telefono').value;
+      const email = document.getElementById('email').value;
+
+      const nuevo = {
+        id: pacientes.length + 1,
+        nombre, edad, sexo, telefono, email
+      };
+
+      pacientes.push(nuevo);
+      renderizarPacientes();
+      document.getElementById('form-paciente').reset();
+      alert('✅ Paciente agregado correctamente');
+    });
+
+    // Editar paciente
+    function editarPaciente(id) {
+      const paciente = pacientes.find(p => p.id === id);
+      document.getElementById('nombre').value = paciente.nombre;
+      document.getElementById('edad').value = paciente.edad;
+      document.getElementById('sexo').value = paciente.sexo;
+      document.getElementById('telefono').value = paciente.telefono;
+      document.getElementById('email').value = paciente.email;
+
+      // Cambiar botón a "Actualizar"
+      const form = document.getElementById('form-paciente');
+      form.setAttribute('data-edit-id', id);
+      form.querySelector('button[type="submit"]').textContent = 'Actualizar Paciente';
+    }
+
+    // Guardar edición
+    document.getElementById('form-paciente').addEventListener('submit', function(e) {
+      if (this.hasAttribute('data-edit-id')) {
+        e.preventDefault();
+        const id = parseInt(this.getAttribute('data-edit-id'));
+        const index = pacientes.findIndex(p => p.id === id);
+        if (index !== -1) {
+          pacientes[index] = {
+            id,
+            nombre: document.getElementById('nombre').value,
+            edad: document.getElementById('edad').value,
+            sexo: document.getElementById('sexo').value,
+            telefono: document.getElementById('telefono').value,
+            email: document.getElementById('email').value
+          };
+          this.removeAttribute('data-edit-id');
+          this.querySelector('button[type="submit"]').textContent = 'Guardar Paciente';
+          document.getElementById('form-paciente').reset();
+          renderizarPacientes();
+          alert('✅ Paciente actualizado correctamente');
+        }
+      }
+    });
+
+    // Eliminar paciente
+    function eliminarPaciente(id) {
+      if (confirm('¿Estás seguro de eliminar a este paciente?')) {
+        pacientes = pacientes.filter(p => p.id !== id);
+        renderizarPacientes();
+        alert('🗑️ Paciente eliminado correctamente');
+      }
+    }
+
+    // Perfil (simulado)
+    document.getElementById('perfil-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      const usuario = JSON.parse(localStorage.getItem('usuario')) || { nombre: 'Admin', email: 'admin@laboratorio.com', rol: 'administrador' };
+      alert(`👤 Perfil del Usuario\n\nNombre: ${usuario.nombre}\nCorreo: ${usuario.email}\nRol: ${usuario.rol}`);
+    });
+
+    // Inicializar
+    renderizarPacientes();
+  </script>
 </body>
 </html>
