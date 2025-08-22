@@ -12,7 +12,7 @@
       padding: 20px;
     }
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: auto;
       background: white;
       padding: 30px;
@@ -22,27 +22,59 @@
     h1 {
       color: #003366;
       text-align: center;
+      margin-bottom: 10px;
+    }
+    p {
+      text-align: center;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    .actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+    .btn {
+      background: #003366;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-align: center;
+    }
+    .btn:hover {
+      background: #002244;
     }
     .logout {
       background: #d9534f;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
       display: block;
-      margin: 20px auto;
+      margin: 30px auto 0;
       width: 200px;
-      text-align: center;
-      text-decoration: none;
+      padding: 12px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Panel de Administrador</h1>
-    <p>Bienvenido al sistema del Laboratorio Care.</p>
-    <a href="../login.html" class="logout">Cerrar Sesión</a>
+    <p>Bienvenido al sistema del Laboratorio Care</p>
+
+    <div class="actions">
+      <a href="./pacientes.html" class="btn">📋 Gestión de Pacientes</a>
+      <a href="./pruebas.html" class="btn">🧪 Gestión de Pruebas</a>
+      <a href="./perfiles.html" class="btn">🧬 Perfiles de Pruebas</a>
+      <a href="./usuarios.html" class="btn">👥 Gestión de Usuarios</a>
+      <a href="./resultados.html" class="btn">📊 Resultados de Laboratorio</a>
+      <a href="./reportes.html" class="btn">📈 Generar Reportes</a>
+    </div>
+
+    <a href="../inicio.html" class="btn logout">Cerrar Sesión</a>
   </div>
 </body>
 </html>
